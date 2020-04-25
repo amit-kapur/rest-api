@@ -11,7 +11,7 @@
 * [] Populating Queries with Mongoose
 * [] Uploading an Image
 * [x] Adding User Sign up
-* [] Adding User Login & JWT Signing
+* [x] Adding User Login & JWT Signing
 * [] JWT Route Protection 
 * [] Adding Controllers
 

@@ -6,6 +6,8 @@ const User = require('../models/users');
 
 const bcrypt = require('bcrypt');
 
+const jwt = require('jsonwebtoken');
+
 router.post('/signup', (request, response, next) => {
 
     const user = User.find({ email: request.body.email })
@@ -16,7 +18,7 @@ router.post('/signup', (request, response, next) => {
                     message: 'email already exists'
                 })
             } else {
-                bcrypt.hash(request.body.email, 10, (err, hash) => {
+                bcrypt.hash(request.body.password, 10, (err, hash) => {
                     if (err) {
                         response.status(500).json({
                             error: err
@@ -44,6 +46,49 @@ router.post('/signup', (request, response, next) => {
                     }
                 });
             }
+        });
+});
+
+router.post('/login', (request, response, next) => {
+
+    const user = User.find({ email: request.body.email })
+        .exec()
+        .then(user => {
+            console.log(request.body.password);
+            console.log(user[0].password);
+            if (user.length < 1) {
+                return response.status(404).json({
+                    message: 'Auth failed'
+                });
+            }
+
+            bcrypt.compare(request.body.password, user[0].password)
+            .then(result => {
+                console.log(result);
+                if (result) {
+                    const token = jwt.sign({
+                        email: request.body.email,
+                        userid: user[0].userId
+                    }, "secret",
+                    {
+                        expiresIn: "1h"
+                    });
+                    return response.status(200).json({
+                        message: 'Auth successful',
+                        token: token
+                    });
+                }
+                response.status(401).json({
+                    message: 'Auth failed'
+                });
+            })
+            .catch(err => {
+                console.log(err);
+                response.status(500).json({
+                    error: err
+                })
+            });;
+
         });
 });
 
