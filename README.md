@@ -12,7 +12,7 @@
 * [] Uploading an Image
 * [x] Adding User Sign up
 * [x] Adding User Login & JWT Signing
-* [] JWT Route Protection 
+* [x] JWT Route Protection 
 * [] Adding Controllers
 
 # Some useful mongo command 
@@ -28,3 +28,6 @@
 
 # JWT
 * JSON Data (Not Encrypted!) + Signature (can be verified by server) => JSON Web Token 
+
+# TODO
+* fix .env file

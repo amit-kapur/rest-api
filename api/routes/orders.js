@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (request, response, next) => {
+const checkAuth = require('../middleware/check-auth');
+
+router.get('/', checkAuth, (request, response, next) => {
     response.status(200).json({
         message: 'Orders were fetched'
     });
 });
 
-router.post('/', (request, response, next) => {
+router.post('/', checkAuth, (request, response, next) => {
     const order = {
         productId: request.body.productId,
         quantity: request.body.quantity
@@ -18,7 +20,7 @@ router.post('/', (request, response, next) => {
     });
 });
 
-router.get('/:orderId', (request, response, next) => {
+router.get('/:orderId', checkAuth,  (request, response, next) => {
     const id = request.params.orderId;
     if (id === 'special') {
         response.json({
@@ -31,7 +33,7 @@ router.get('/:orderId', (request, response, next) => {
     }
 });
 
-router.delete('/:orderId', (request, response, next) => {
+router.delete('/:orderId', checkAuth, (request, response, next) => {
     response.status(200).json ({
         message: 'order deleted'
     })
