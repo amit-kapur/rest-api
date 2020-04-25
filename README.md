@@ -6,11 +6,11 @@
 * [x] Handling Errors
 * [x] Parsing the body and CORS
 * [x] MongoDB and Mongoose setup 
-* [] Mongoose validation 
+* [x] Mongoose validation 
 * [] Managing Orders with Mongoose
 * [] Populating Queries with Mongoose
 * [] Uploading an Image
-* [] Adding User Sign up
+* [x] Adding User Sign up
 * [] Adding User Login & JWT Signing
 * [] JWT Route Protection 
 * [] Adding Controllers
@@ -26,4 +26,5 @@
 * exit 
 
 
-
+# JWT
+* JSON Data (Not Encrypted!) + Signature (can be verified by server) => JSON Web Token 

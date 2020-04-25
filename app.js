@@ -6,15 +6,18 @@ const mongoose = require('mongoose');
 
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
+const userRoutes = require('./api/routes/users');
 
 // connect to DB
 mongoose.connect("mongodb://localhost/ak-shop", {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 });
+mongoose.Promise = global.Promise;
 
 // Middleware
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use((request, response, next) => {
@@ -31,6 +34,7 @@ app.use((request, response, next) => {
 })
 
 // Routing
+app.use('/users', userRoutes);
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
 
@@ -44,9 +48,9 @@ app.use('/', (request, response, next) => {
 });
 
 app.use((error, request, response, next) => {
-    
-    response.status (error.status || 500);
-    
+
+    response.status(error.status || 500);
+
     response.json({
         error: {
             message: 'not found'
