@@ -9,7 +9,7 @@ const orderRoutes = require('./api/routes/orders');
 // Middleware
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json);
+app.use(bodyParser.json());
 
 app.use((request, response, next) => {
     response.header('Access-Control-Allow-Origin', '*');
