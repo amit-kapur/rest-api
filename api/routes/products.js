@@ -6,10 +6,25 @@ const Product = require('../models/product');
 
 router.get('/', (request, response, next) => {
     Product.find()
+        .select('name price _id')
         .exec()
         .then(result => {
-            console.log('From mongo database: ' + result);
-            response.status(200).json(result);
+            const res = {
+                count: result.length,
+                products: result.map(doc => {
+                    return {
+                        name: doc.name,
+                        price: doc.price,
+                        _id: doc._id,
+                        request: {
+                            type: 'GET',
+                            url: 'http://localhost:5000/products/' + doc._id
+                        }
+                    }
+                })
+            }
+            console.log('From mongo database: ' + res);
+            response.status(200).json(res);
         })
         .catch(err => {
             console.log(err);
@@ -29,8 +44,16 @@ router.post('/', (request, response, next) => {
         console.log(result);
         if (result) {
             response.status(201).json({
-                message: 'Handling POST request to /products',
-                createdProduct: product
+                message: 'Created product successfully',
+                createdProduct: {
+                    name: result.name,
+                    price: result.price,
+                    _id: result._id,
+                    request: {
+                        type: 'GET',
+                        url: 'http://localhost:5000/products/' + result._id
+                    }
+                }
             });
         } else {
             response.status(404).json({
@@ -50,10 +73,18 @@ router.post('/', (request, response, next) => {
 router.get('/:productId', (request, response, next) => {
     const id = request.params.productId;
     Product.findById(id)
+        .select('name price _id')
         .exec()
         .then(result => {
             console.log('From mongo database: ' + result);
-            response.status(200).json(result);
+            response.status(200).json({
+                product: result,
+                request: {
+                    type: 'GET',
+                    description: 'get all products',
+                    url: 'http://localhost:5000/products/'
+                }
+            });
         })
         .catch(err => {
             console.log(err);
@@ -74,17 +105,24 @@ router.patch('/:productId', (request, response, next) => {
             updateOps
         }
     })
-    .exec()
-    .then(result => {
-        console.log('From mongo database: ' + result);
-        response.status(200).json(result);
-    })
-    .catch(err => {
-        console.log(err);
-        response.status(500).json({
-            error: err
+        .exec()
+        .then(result => {
+            console.log('From mongo database: ' + result);
+            response.status(200).json({
+                message: 'Product updated',
+                request: {
+                    type: 'GET',
+                    description: 'get all products',
+                    url: 'http://localhost:5000/products/'
+                }
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            response.status(500).json({
+                error: err
+            });
         });
-    });
 });
 
 router.delete('/:productId', (request, response, next) => {
@@ -93,7 +131,14 @@ router.delete('/:productId', (request, response, next) => {
         .exec()
         .then(result => {
             console.log('From mongo database: ' + result);
-            response.status(200).json(result);
+            response.status(200).json({
+                message: 'Product deleted',
+                request: {
+                    type: 'POST',
+                    url: 'http://localhost:5000/products/',
+                    body: { name: 'String', price: 'Number' }
+                }
+            });
         })
         .catch(err => {
             console.log(err);
