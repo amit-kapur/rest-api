@@ -13,7 +13,8 @@
 * [x] Adding User Sign up
 * [x] Adding User Login & JWT Signing
 * [x] JWT Route Protection 
-* [] Adding Controllers
+* [x] Adding Controllers
+    - MVC Architecture
 
 # Some useful mongo command 
 
