@@ -26,9 +26,5 @@
 * cls
 * exit 
 
-
 # JWT
 * JSON Data (Not Encrypted!) + Signature (can be verified by server) => JSON Web Token 
-
-# TODO
-* fix .env file
